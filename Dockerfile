@@ -29,14 +29,15 @@ ENV WEBAPPS=$CATALINA_BASE/webapps
 ENV PATH $PATH:$CATALINA_HOME/bin
 
 RUN \
-    mkdir -p /usr/share/tomcat8/common/classes \
-    /usr/share/tomcat8/common/classes \
-    /usr/share/tomcat8/shared/classes \
-    /usr/share/tomcat8/server/classes
+    mkdir -p ${CATALINA_HOME}/common/classes \
+    ${CATALINA_HOME}/common/classes \
+    ${CATALINA_HOME}/shared/classes \
+    ${CATALINA_HOME}/server/classes \
+    ${CATALINA_BASE}/temp \
+    && chown tomcat8.tomcat8 /var/lib/tomcat8/temp
 
 WORKDIR ${CATALINA_BASE}
-RUN chmod 777 logs work
-RUN chown -R tomcat8.tomcat8 logs work
+RUN chmod 777 logs work && chown -R tomcat8.tomcat8 logs work
 
 WORKDIR ${CATALINA_HOME}
 RUN find ./bin/ -name '*.sh' -exec sed -ri 's|^#!/bin/sh$|#!/usr/bin/env bash|' '{}' +;
